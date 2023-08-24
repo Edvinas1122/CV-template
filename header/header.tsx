@@ -41,13 +41,16 @@ type Profile = {
 interface CVHeaderProps {
 	profile: Profile;
 	contacts: Contacts;
+	childern?: React.ReactNode;
 }
 
 interface CVProps {
 	header: CVHeaderProps;
 }
 
-const InstantMessanging = (props: InstantMessanging) => {
+import React from 'react';
+
+const InstantMessanging: React.FC<InstantMessanging> = (props: InstantMessanging) => {
 	const {
 		name,
 		value,
@@ -184,8 +187,9 @@ const Contacts = ({contacts}: {contacts: Contacts}) => {
 			/>
 			<div className="socials">
 				<h3>Socials</h3>
-				{socials.map((social) => (
+				{socials.map((social, index) => (
 					<Social
+						key={index}
 						name={social.name}
 						value={social.value}
 						link={social.link}
@@ -194,8 +198,9 @@ const Contacts = ({contacts}: {contacts: Contacts}) => {
 			</div>
 			<div className="instant-messanging">
 				<h3>Instant Messaging</h3>
-				{instantMessanging.map((instantMessanging) => (
+				{instantMessanging.map((instantMessanging, index) => (
 					<InstantMessanging
+						key={index}
 						name={instantMessanging.name}
 						value={instantMessanging.value}
 						icon={instantMessanging.icon}
@@ -206,9 +211,10 @@ const Contacts = ({contacts}: {contacts: Contacts}) => {
 	);
 }
 
-const CVHeader = ({
+const CVSideBar = ({
 	profile,
-	contacts
+	contacts,
+	childern,
 }: CVHeaderProps
 ) => {
 	return (
@@ -216,6 +222,7 @@ const CVHeader = ({
 			<Profile
 				profile={profile}
 				/>
+			{childern}
 			<Contacts
 				contacts={contacts}
 				/>
@@ -223,5 +230,5 @@ const CVHeader = ({
 	);
 }
 
-export default CVHeader;
+export default CVSideBar;
 export type { CVProps, CVHeaderProps, Profile, Contacts, Address, Social, InstantMessanging };

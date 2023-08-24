@@ -1,5 +1,6 @@
-import CVHeader, {CVHeaderProps} from './header/header';
+import CVSideBar, {CVHeaderProps} from './header/header';
 import CVContent, {CVContentProps} from './content/CVContent';
+import Skills from './content/skills';
 import "./CV.css";
 
 interface CVProps {
@@ -23,9 +24,16 @@ export default function CV({
 		<section className={"cv_page "
 			+ sans.className
 		}>
-			<CVHeader
+			<CVSideBar
 				profile={data.header.profile}
 				contacts={data.header.contacts}
+				childern={
+					<Skills
+						languages={data.skills.languages}
+						technologies={data.skills.technologies}
+						tools={data.skills.tools}
+					/>
+				}
 			/>
 			<CVContent
 				content={data.content}

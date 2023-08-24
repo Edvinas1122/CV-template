@@ -94,13 +94,14 @@ const Timeline = ({
 	return (
 		<div className="timeline_display">
 			<div className="timeline">
-				{occupations.map((occupation) => {
+				{occupations.map((occupation, index) => {
 					const width = calculateWidth(occupation.fromDate, occupation.toDate, beginDate, endDate);
 					const start = calculateStart(occupation.fromDate, beginDate, endDate);
 					const color = occupation.occupationType === 'education' ? 'red' : 'blue';
 					const under = occupation.occupationType === 'education';
 					return (
 						<EventBranch
+							key={index}
 							event={{
 								label: occupation.title,
 								start_time: occupation.fromDate,

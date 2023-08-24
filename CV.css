@@ -14,46 +14,47 @@
 	justify-content: space-between;
 }
 
-.cv_page h1, h2, h3, p, a {
+.cv_page h1, .cv_page h2, .cv_page h3, .cv_page p, .cv_page a {
 	@apply p-2;
 }
 
 .cv_header {
-	@apply flex flex-col justify-start items-start;
+	@apply flex flex-col justify-start;
 	/* apply background collor with shaddowbox */
 	background-color: #f5f5f5;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 	width: 30%;
 	height: 100%;
+	justify-content: space-between;
 }
 
 .name-title {
 	position: absolute;
 	white-space: nowrap;
 	color: white;
-	text-shadow: 0 0 1px black, 0 1px 2px white;
-	margin: -40px 0em;
+	margin: -27px 0em;
+	border-radius: 0 42px 3px 0;
+	border-color: #6a6a6a1b;
+	border-top-width: 1px;
 }
 
 .name-title h1 {
-	@apply text-4xl text-center;
-	background: linear-gradient(89deg, rgb(255 247 235 / 82%) 0%, rgb(211 207 229 / 99%) 100%);
-	/* background-color: bisque; */
+	@apply text-4xl text-center font-bold;
+	background: linear-gradient(90deg, rgb(254 216 175 / 22%) 0%, rgb(212 195 226 / 56%) 68%, rgb(255 255 255 / 0%) 100%);
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-	border-radius: 0 5px 5px 0;
+	border-radius: 0 200px 3px 0;
+	text-shadow: 0 0 4px #444444b0, 0 0px 10px white;
 	letter-spacing: 0.1em;
 	padding: 2px 1em 0 0.5em;
 }
 
 .name-title p {
-	@apply text-gray-400 font-light text-center;
+	@apply font-light text-center;
 	letter-spacing: 0.6em;
 	color: white;
-	font-size: 1em;
 	padding: 2px;
-	width: 100%;
-	background: linear-gradient(90deg, rgb(255 216 175) 0%, rgb(231 202 254) 68%, rgb(253 215 172 / 0%) 100%);
-	text-shadow: 0 0 1px #74747466, 0 0px 4px white;
+	background: linear-gradient(90deg, rgb(255 216 175) 0%, rgb(194 143 234) 68%, rgb(253 215 172 / 0%) 100%);
+	/* text-shadow: 0 0 1px #74747466, 0 0px 4px white; */
 }
 
 .image-container {
@@ -66,7 +67,7 @@
 
 .profile img {
 	@apply rounded-full;
-	background: linear-gradient(129deg, rgb(255 219 116) 0%, rgb(180 117 231) 68%, rgb(255 221 64 / 85%) 100%);
+	background: linear-gradient(129deg, rgb(255 219 116 / 45%) 0%, rgb(180 117 231 / 34%) 68%, rgb(255 221 64 / 6%) 100%);
 	width: 100%;
 	padding: 0.2em;
 	box-shadow: 0 0 3px #000000ca, 0 0 10px white;
@@ -75,6 +76,7 @@
 .profile {
 	width: fit-content;
 	max-width: 100%;
+	margin-top: 1em;
 }
 
 .cv_header h2 {
@@ -88,7 +90,10 @@
 	@apply font-light;
 	font-weight: 300;
 	font-size: 0.75em;
-	letter-spacing: 0.2em;
+	letter-spacing: 0.3em;
+	display: inline-block;
+	border-bottom-width: 1px;
+	margin-left: 0.5em;
 }
 
 
@@ -105,19 +110,31 @@
 }
   
 .infoLine i, .infoLine svg {
-	width: 30px; /* You can adjust this value */
+	/* box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); */
+
 	height: 15px; /* You can adjust this value */
 	padding: 5px;
 	background-color: bisque;
 	border-radius: 0 0.25em 0.25em 0;
-	box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+	border-color: #6a6a6a2e;
+	border-width: 1px;
+	margin-right: 0.6em;
 }
 
-.contacts h1, h2, h3, p, a {
-	padding: 0.35em;
+
+
+.contacts {
+	margin-bottom: 1em;
 }
 
-.contacts p, a {
+.contacts h1, .contacts h2, .contacts h3, .contacts p, .contacts a {
+	/* padding: 0.25em;
+	margin-bottom: 0.2em;
+	margin-top: 0.2em; */
+
+}
+
+.contacts p, .contacts a {
 	font-size: 0.8em;
 }
 
@@ -126,9 +143,54 @@
 	letter-spacing: 0.1em;
 } */
 
-.group {
+.group h1, .group h3, .group p, .group a {
+	margin-bottom: 0.2em;
+	margin-top: 0.2em;
+	padding: 0.25em;
 }
 
 .group h2 {
 	/* @apply text-2xl; */
+}
+
+.skills-list {
+	display: flex;
+    max-width: fit-content;
+    flex-wrap: wrap;
+}
+
+.skills-list img {
+	@apply rounded-full;
+	width: 35px;
+	height: 35px;
+	padding: 0.2em;
+	/* box-shadow: 0 0 3px #000000ca, 0 0 10px white; */
+	border-width: 1px;
+	border-color: #6a6a6a2e;
+}
+
+.skill {
+	@apply flex flex-col justify-between inline-block;
+	/* stick to flex start */
+	align-items: flex-start;
+	margin-inline: 1em;
+}
+.experience {
+	width: 100%;
+}
+
+.level {
+	@apply flex flex-col justify-between;
+	@apply text-gray-600 font-light;
+	font-size: 0.3em;
+}
+
+.skill .skill-info {
+	@apply flex flex-row justify-between;
+	@apply text-gray-600 font-light;
+	font-size: 0.3em;
+}
+
+.skill-icon {
+	margin: auto;
 }
