@@ -61,11 +61,11 @@ const Skill = (props: Skill & { isFirst: boolean, isLast: boolean }) => {
 	const skillPropStyle = "experience " + (isLast ? "last" : ""); 
 
 	return (
-		<div className={"skill-tag " + "level-" + level}>
-            <div className={skillPropStyle}>
+		<dd className={"skill-tag " + "level-" + level}>
+            {/* <div className={skillPropStyle}>
                 {isFirst && levelName(level)}
-            </div>
-		<div className={"skill infoLine "}>
+            </div> */}
+		<div className={"skill"}>
 			<div className="skill-icon">
 				<img src={icon} alt={"skill-icon-" + name} />
 			</div>
@@ -73,11 +73,32 @@ const Skill = (props: Skill & { isFirst: boolean, isLast: boolean }) => {
 				<p className="skill-name">{name}</p>
 			</div>
 		</div>
-		</div>
+		</dd>
 	);
 }
 
+function groupByLevel(skills: Skill[]): {[level: string]: Skill[]} {
+	return skills.reduce((acc, skill) => {
+		if (!acc[skill.level]) {
+			acc[skill.level] = [];
+		}
+		acc[skill.level].push(skill);
+		return acc;
+	}, {} as {[level: string]: Skill[]});
+}
+
 function printSkills(skills: Skill[], group: string) {
+	// // Create metadata for each skill
+	// const skillMetadata = skills.map((skill, index) => {
+	// 	const isLast = index === skills.length - 1 || skills[index + 1].level !== skill.level;
+	// 	const isFirst = index === 0 || skills[index - 1].level !== skill.level;
+	// 	return {
+	// 		...skill,
+	// 		isFirst,
+	// 		isLast
+	// 	};
+	// });
+	const groupedSkills = groupByLevel(skills);
 	const levels = Object.values(
 		skills.reduce((acc, skill) => {
 			acc[skill.level] = skill.level;
@@ -86,28 +107,35 @@ function printSkills(skills: Skill[], group: string) {
 	)
 	.sort((a, b) => b - a);
 
-	// Create metadata for each skill
-	const skillMetadata = skills.map((skill, index) => {
-		const isLast = index === skills.length - 1 || skills[index + 1].level !== skill.level;
-		const isFirst = index === 0 || skills[index - 1].level !== skill.level;
-		return {
-			...skill,
-			isFirst,
-			isLast
-		};
-	});
 	return (
-		<div className={group}>
-			<h3>{group}</h3>
-			<div className="skills-list">
-				{skillMetadata.map((skill, index) => (
-					<Skill 
+
+			<dl className={group}>
+				<dt>{group}</dt>
+				<div className="skills-list">
+					{/* {skillMetadata.map((skill, index) => (
+						<Skill 
 						{...skill} 
 						key={index}
-					/>
+						/>
+						))} */}
+				{levels.map(level => (
+					<div className={"level-group level-group-" + level} key={level}>
+						<div className="group-tag">
+							<p className={"experience"}>{levelName(level)}</p>
+							<div className="group-marker-begin"></div>
+						</div>
+						{groupedSkills[level].map((skill, index) => (
+							<Skill {...skill} key={index} />
+							))}
+						<div className="group-marker">
+							{/* <p className={"experience"}>{levelName(level)}</p> */}
+							<div className="group-marker-vis"></div>
+						</div>
+					</div>
 				))}
-			</div>
-		</div>
+				</div>
+			</dl>
+
 	);
 }
 
@@ -121,9 +149,11 @@ const Skills = (props: SkillsProps) => {
 	return (
 		<div className="skills group">
 			<h2>Skills</h2>
+
 			{printSkills(languages, "Languages")}
 			{printSkills(technologies, "Technologies")}
 			{printSkills(tools, "Tools")}
+
 		</div>
 	);
 }

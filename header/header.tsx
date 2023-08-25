@@ -60,10 +60,10 @@ const InstantMessanging: React.FC<InstantMessanging> = (props: InstantMessanging
 
 	const iconHTML = getFontAwesomeIcon(name);
 	return (
-		<div className="instant-messanging infoLine">
+		<dd className="instant-messanging infoLine">
 			{iconHTML}
 			<p>{value}</p>
-		</div>
+		</dd>
 	);
 }
 
@@ -76,10 +76,10 @@ const Social = (props: Social) => {
 
 	const iconHTML = getFontAwesomeIcon(name);
 	return (
-		<div className="social infoLine">
+		<li className="social infoLine">
 			{iconHTML}
 			<a href={link}>{value}</a>
-		</div>
+		</li>
 	);
 }
 
@@ -150,21 +150,21 @@ const BasicContacts = ({
 
 	return (
 		<div className="basic-contacts">
-			<div className="phone infoLine">
+			<dd className="phone infoLine">
 				{phoneHTML}
 				<p>{phone}</p>
-			</div>
+			</dd>
 			<Address
 				address={address}
 			/>
-			<div className="email infoLine">
+			<dd className="email infoLine">
 				{emailHTML}
 				<p>{email}</p>
-			</div>
-			<div className="website infoLine">
+			</dd>
+			<dd className="website infoLine">
 				{websiteHTML}
 				<a href={website}>{website}</a>
-			</div>
+			</dd>
 		</div>
 	);
 }
@@ -180,17 +180,18 @@ const Contacts = ({contacts}: {contacts: Contacts}) => {
 	} = contacts;
 
 	return (
-		<div className="contacts group">
+		<section className="contacts group">
 			<h2>Contacts</h2>
-			<h3>Basic</h3>
+			<dl>
+			<dt>Basic</dt>
 			<BasicContacts
 				phone={phone}
 				email={email}
 				website={website}
 				address={address}
 			/>
+				<dt>Socials</dt>
 			<div className="socials">
-				<h3>Socials</h3>
 				{socials.map((social, index) => (
 					<Social
 						key={index}
@@ -200,8 +201,8 @@ const Contacts = ({contacts}: {contacts: Contacts}) => {
 					/>
 				))}
 			</div>
+			<dt>Instant Messaging</dt>
 			<div className="instant-messanging">
-				<h3>Instant Messaging</h3>
 				{instantMessanging.map((instantMessanging, index) => (
 					<InstantMessanging
 						key={index}
@@ -211,7 +212,8 @@ const Contacts = ({contacts}: {contacts: Contacts}) => {
 					/>
 				))}
 			</div>
-		</div>
+			</dl>
+		</section>
 	);
 }
 

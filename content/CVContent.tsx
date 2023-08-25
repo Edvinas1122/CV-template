@@ -145,7 +145,7 @@ const CVContent = ({
 				about={content.about}
 			/>
 			<div className={"occupation"}>
-				<Timeline
+				{/* <Timeline
 					occupations={content.occupation}
 				/>
 				<h2>Education</h2>
@@ -157,7 +157,7 @@ const CVContent = ({
 				<GetOccupationContentGroup
 					group={OccupationType.experience}
 					content={content.occupation}
-				/>
+				/> */}
 			</div>
 		</div>
 	);
