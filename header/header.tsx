@@ -22,6 +22,7 @@ type Address = {
 	street: string;
 	house: Number;
 	flat: Number;
+	room: Number;
 }
 
 type Social = {
@@ -116,14 +117,17 @@ const Address = ({address}: {address: Address}) => {
 		street,
 		house,
 		flat,
+		room,
 	} = address;
 
 	const iconHTML = getFontAwesomeIcon("address");
+	const href = `https://www.google.com/maps/place/${country}+${city}+${postcode}+${street}+${house}+${flat}`;
+	const lastPiece = room ? `, ${flat}-${room}` : `, ${flat}`;
 
 	return (
 		<div className="address infoLine">
 			{iconHTML}
-			<p>{country}, {city}, {postcode}, {street}, {house}, {flat}</p>
+			<a href={href}>{country}, {city}, {postcode}, {street}, {house}, {lastPiece}</a>
 		</div>
 	);
 }
@@ -159,7 +163,7 @@ const BasicContacts = ({
 			</div>
 			<div className="website infoLine">
 				{websiteHTML}
-				<p>{website}</p>
+				<a href={website}>{website}</a>
 			</div>
 		</div>
 	);

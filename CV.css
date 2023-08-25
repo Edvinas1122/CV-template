@@ -7,10 +7,11 @@
 	@apply w-full h-full flex flex-col md:flex-row items-start;
 	width: 210mm;
     height: 297mm;
-    margin: auto;
-
+    /* margin: auto; */
+	padding: 0;
+	margin: 0;
     font-family: Arial, sans-serif;
-	background-color: white;
+	background-color: #ffffff;
 	justify-content: space-between;
 }
 
@@ -79,18 +80,19 @@
 	margin-top: 1em;
 }
 
-.cv_header h2 {
+.cv_page h2 {
 	@apply text-2xl;
 	letter-spacing: 0.1em;
 	@apply text-gray-600;
+	line-height: 1rem;
 }
 
-.cv_header h3 {
-	@apply text-gray-400;
+.cv_page h3 {
+	@apply text-gray-600;
 	@apply font-light;
 	font-weight: 300;
-	font-size: 0.75em;
-	letter-spacing: 0.3em;
+	font-size: 0.8em;
+	letter-spacing: 0.25em;
 	display: inline-block;
 	border-bottom-width: 1px;
 	margin-left: 0.5em;
@@ -114,7 +116,7 @@
 
 	height: 15px; /* You can adjust this value */
 	padding: 5px;
-	background-color: bisque;
+	/* background-color: bisque; */
 	border-radius: 0 0.25em 0.25em 0;
 	border-color: #6a6a6a2e;
 	border-width: 1px;
@@ -125,6 +127,7 @@
 
 .contacts {
 	margin-bottom: 1em;
+	font-size: 0.9em;
 }
 
 .contacts h1, .contacts h2, .contacts h3, .contacts p, .contacts a {
@@ -155,9 +158,12 @@
 
 .skills-list {
 	display: flex;
-    max-width: fit-content;
+    /* max-width: fit-content; */
+	justify-content: space-evenly;
+    padding-right: 0.8em;
     flex-wrap: wrap;
 }
+
 
 .skills-list img {
 	@apply rounded-full;
@@ -169,28 +175,129 @@
 	border-color: #6a6a6a2e;
 }
 
+.skill-tag {
+	@apply flex flex-col justify-between;
+	@apply text-gray-600 font-light;
+	font-size: 0.3em;
+
+}
+
 .skill {
 	@apply flex flex-col justify-between inline-block;
 	/* stick to flex start */
-	align-items: flex-start;
+	align-items: center;
 	margin-inline: 1em;
+	/* border-top-width: 1px; */
+	padding: 0.3em 0em;
 }
+
+.skill-tag .last {
+	border-right-width: 1px;
+	height: 14px;
+	padding-right: 3px;
+	max-width: none;
+}
+
 .experience {
+	@apply text-gray-500;
 	width: 100%;
+	font-size: 0.3em;
+	max-width: 40px;
+	padding-left: 4em;
+	margin-bottom: -3px;
 }
 
 .level {
 	@apply flex flex-col justify-between;
-	@apply text-gray-600 font-light;
+	/* @apply text-gray-600 font-light; */
 	font-size: 0.3em;
 }
 
+
 .skill .skill-info {
 	@apply flex flex-row justify-between;
-	@apply text-gray-600 font-light;
 	font-size: 0.3em;
+}
+
+.level-2 {
+	font-weight: 600;
+}
+
+.skill .skill-name {
+	@apply text-center;
+	font-size: 0.6em;
+
+	padding: 0 1em;
+	position: absolute;
+	border-width: 1px;
+	border-radius: 1em 1em;
+}
+
+.skill-name-box {
+	/* padding: 1em; */
+	display: flex;
+	justify-content: center;
+	/* border-width: 1px; */
+	margin-top: -6px;
+	max-width: 35px;
+	margin-bottom: 12px;
 }
 
 .skill-icon {
 	margin: auto;
+	min-width: 35px;
+}
+
+.cv_content {
+	@apply flex flex-col justify-center items-end; /* Aligns content to the right */
+	/* width: min-content; */
+}
+
+.cv_content h2, .cv_content h3, .cv_content p, .cv_content a {
+	padding: auto;
+	margin: auto;
+	padding-right: 1.5rem;
+	padding-left: 1.5rem;
+}
+
+.cv_content h2 {
+	background-color: bisque;
+	display: inline-block;
+}
+
+.cv_content p {
+	@apply text-gray-600;
+	@apply font-light;
+	font-weight: 300;
+	font-size: 0.8em;
+	/* letter-spacing: 0.25em; */
+	display: inline-block;
+	margin-left: 0.5em;
+	text-indent: 2em;
+	padding-left: 1em;
+}
+
+.cv_content section {
+	border-bottom-width: 1px;
+}
+
+.about {
+	/* background-color: #ffffff; */
+}
+
+.about_info_aspirations, .about_info_background {
+	text-align: end;
+}
+
+.about_info_background p {
+	padding-left: 10rem;
+}
+
+.about h3 {
+	font-size: 0.5em;
+}
+
+.about p {
+	font-size: 0.8em;
+	max-height: 20%;
 }

@@ -36,22 +36,6 @@ const SkillLevelDisplay = ({
 	);
 }
 
-const Skill = (props: Skill) => {
-	const {
-		name,
-		icon,
-		level,
-	} = props;
-
-	return (
-		<div className="skill infoLine">
-			<div className="skill-icon">
-				<img src={icon} alt={"skill-icon-" + name} />
-			</div>
-		</div>
-	);
-}
-
 function levelName(level: SkillLevel) {
 	switch (level) {
 		case SkillLevel.Begginer:
@@ -65,19 +49,33 @@ function levelName(level: SkillLevel) {
 	}
 }
 
-function printLevel(skills: Skill[], level: SkillLevel) {
+const Skill = (props: Skill & { isFirst: boolean, isLast: boolean }) => {
+	const {
+		name,
+		icon,
+		level,
+		isFirst,
+		isLast,
+	} = props;
+
+	const skillPropStyle = "experience " + (isLast ? "last" : ""); 
+
 	return (
-		<div className={"level level-" + level}>
-			<span className={"experience"}>{levelName(level) + ":" }</span>
-			<div className="skills-list">
-			{skills.map((skill, index) => (
-				<Skill {...skill} key={index} />
-			))}
+		<div className={"skill-tag " + "level-" + level}>
+            <div className={skillPropStyle}>
+                {isFirst && levelName(level)}
+            </div>
+		<div className={"skill infoLine "}>
+			<div className="skill-icon">
+				<img src={icon} alt={"skill-icon-" + name} />
 			</div>
+			<div className={"skill-name-box"}>
+				<p className="skill-name">{name}</p>
+			</div>
+		</div>
 		</div>
 	);
 }
-
 
 function printSkills(skills: Skill[], group: string) {
 	const levels = Object.values(
@@ -87,14 +85,28 @@ function printSkills(skills: Skill[], group: string) {
 		}, {} as {[key: string]: SkillLevel})
 	)
 	.sort((a, b) => b - a);
-  
+
+	// Create metadata for each skill
+	const skillMetadata = skills.map((skill, index) => {
+		const isLast = index === skills.length - 1 || skills[index + 1].level !== skill.level;
+		const isFirst = index === 0 || skills[index - 1].level !== skill.level;
+		return {
+			...skill,
+			isFirst,
+			isLast
+		};
+	});
 	return (
 		<div className={group}>
 			<h3>{group}</h3>
-			{levels.map(level => {
-			const skillsAtLevel = skills.filter(skill => skill.level === level);
-			return printLevel(skillsAtLevel, level as SkillLevel);
-			})}
+			<div className="skills-list">
+				{skillMetadata.map((skill, index) => (
+					<Skill 
+						{...skill} 
+						key={index}
+					/>
+				))}
+			</div>
 		</div>
 	);
 }
@@ -107,7 +119,7 @@ const Skills = (props: SkillsProps) => {
 	} = props;
 
 	return (
-		<div className="skills">
+		<div className="skills group">
 			<h2>Skills</h2>
 			{printSkills(languages, "Languages")}
 			{printSkills(technologies, "Technologies")}

@@ -91,6 +91,46 @@ export interface CVContentProps {
 	list: ListContent[];
 }
 
+interface AboutProps {
+    who: string;
+    aspirations: string;
+    background: string;
+}
+
+const About = ({
+	about,
+}:{
+	about: AboutProps,
+}) => {
+	return (
+		<section className={"about"}>
+			<h2>About Me</h2>
+			<div className={"about_info"}>
+				<div className={"about_info_who"}>
+				<h3>
+					Who am I?
+				</h3>
+				<p>{about.who}</p>
+				</div>
+				<div className={"about_info_aspirations"}>
+
+				<h3>
+					Aspirations
+				</h3>
+				<p>{about.aspirations}</p>
+				</div>
+				<div className={"about_info_background"}>
+				<h3>
+					Background
+				</h3>
+				<p>{about.background}</p>
+				</div>
+			</div>
+		</section>
+	);
+}
+
+
 import Timeline from './timeline';
 
 const CVContent = ({
@@ -101,10 +141,13 @@ const CVContent = ({
 
 	return (
 		<div className={"cv_content"}>
-			<Timeline
-				occupations={content.occupation}
+			<About 
+				about={content.about}
 			/>
 			<div className={"occupation"}>
+				<Timeline
+					occupations={content.occupation}
+				/>
 				<h2>Education</h2>
 				<GetOccupationContentGroup
 					group={OccupationType.education}
