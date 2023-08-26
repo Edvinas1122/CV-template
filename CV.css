@@ -32,7 +32,7 @@
 	padding-right: 0.5rem;
 }
 
-.cv_header h2, .cv_header h3, .cv_header dl {
+.cv_header h2, .cv_header h3, .cv_header dl, .cv_header ol {
 	margin-left: 1rem;
 	padding-left: 0;
 }
@@ -41,14 +41,14 @@
 	padding-left: 1rem;
 }
 
-.cv_header dd {
-	@apply font-light;
+.cv_header dd, .cv_header li {
+	@apply font-light text-gray-700;
 	/* margin-top: 0.3em;
 	margin-bottom: 0.3em; */
 }
 
 .cv_header dt {
-	@apply font-light text-gray-600;
+	@apply font-light text-gray-500;
 	font-weight: 300;
 	font-size: 0.8em;
 	letter-spacing: 0.25em;
@@ -187,7 +187,6 @@ dl > .skills-list > div {
 .group-tag {
 	display: initial;
 	position: absolute;
-	/* transform: translateX(36px); */
 	text-align: left;
 }
 
@@ -195,36 +194,41 @@ dl > .skills-list > div {
 	display: initial;
 	position: absolute;
 	transform: translateX(-36px);
-	/* text-align: left; */
+
 }
 
 .experience {
-	@apply text-gray-300;
+	@apply text-gray-400;
 	font-size: 0.3em;
 	position: absolute;
 	font-weight: 100;
+	/* color: #00000044; */
+	color: #00000044;
+
 	/* left: 0; */
 }
 
 .group-marker-begin, .group-marker-vis {
 	width: 35px;
 	height: 52px;
-	border-color: #0000000f;
+	border-color: #0000000c;
 	border-style: solid;
 	border-top-width: 1px;
 	margin-top: 0.8rem;
 }
 
 .group-marker-begin {
-	border-bottom-width: 1px;
-	border-top-left-radius: 10px;
 	border-bottom-left-radius: 10px;
+	border-top-left-radius: 10px;
+	border-bottom-width: 1px;
 	border-left-width: 1px;
 }
 
 .group-marker-vis {
-	border-right-width: 1px;
 	border-top-right-radius: 10px;
+	border-bottom-width: 1px;
+	border-right-width: 1px;
+	border-bottom-right-radius: 10px;
 }
 
 .level-group {
@@ -298,6 +302,17 @@ dl > .skills-list > div {
 .skill-icon {
 	margin: auto;
 	min-width: 35px;
+}
+
+.legend {
+	margin-top: 1rem;
+}
+
+.legend li {
+    display: inline-flex;
+    gap: 0.2rem;
+	color: #00000020;
+	font-size: 0.3em;
 }
 
 .cv_content {

@@ -76,10 +76,10 @@ const Social = (props: Social) => {
 
 	const iconHTML = getFontAwesomeIcon(name);
 	return (
-		<li className="social infoLine">
+		<dd className="social infoLine">
 			{iconHTML}
 			<a href={link}>{value}</a>
-		</li>
+		</dd>
 	);
 }
 
@@ -125,10 +125,10 @@ const Address = ({address}: {address: Address}) => {
 	const lastPiece = room ? `, ${flat}-${room}` : `, ${flat}`;
 
 	return (
-		<div className="address infoLine">
+		<dd className="address infoLine">
 			{iconHTML}
 			<a href={href}>{country}, {city}, {postcode}, {street}, {house}, {lastPiece}</a>
-		</div>
+		</dd>
 	);
 }
 

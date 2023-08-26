@@ -1,5 +1,5 @@
 enum SkillLevel {
-	Begginer,
+	Beginner,
 	Intermediate,
 	Advanced,
 	Expert,
@@ -36,16 +36,33 @@ const SkillLevelDisplay = ({
 	);
 }
 
+function levelDisplay(level: SkillLevel) {
+	switch (level) {
+		case SkillLevel.Beginner:
+		  return "●";
+		case SkillLevel.Intermediate:
+		  return "●●";
+		case SkillLevel.Advanced:
+		  return "●●●";
+		case SkillLevel.Expert:
+		  return "●●●●";
+		default:
+		  return "";
+	}
+}
+
 function levelName(level: SkillLevel) {
 	switch (level) {
-		case SkillLevel.Begginer:
-			return "Begginer";
+		case SkillLevel.Beginner:
+			return "Beginner";
 		case SkillLevel.Intermediate:
 			return "Intermediate";
 		case SkillLevel.Advanced:
 			return "Advanced";
 		case SkillLevel.Expert:
 			return "Expert";
+		default:
+			return "";
 	}
 }
 
@@ -63,7 +80,7 @@ const Skill = (props: Skill & { isFirst: boolean, isLast: boolean }) => {
 	return (
 		<dd className={"skill-tag " + "level-" + level}>
             {/* <div className={skillPropStyle}>
-                {isFirst && levelName(level)}
+                {isFirst && levelDisplay(level)}
             </div> */}
 		<div className={"skill"}>
 			<div className="skill-icon">
@@ -121,7 +138,7 @@ function printSkills(skills: Skill[], group: string) {
 				{levels.map(level => (
 					<div className={"level-group level-group-" + level} key={level}>
 						<div className="group-tag">
-							<p className={"experience"}>{levelName(level)}</p>
+							<p className={"experience"}>{levelDisplay(level)}</p>
 							<div className="group-marker-begin"></div>
 						</div>
 						{groupedSkills[level].map((skill, index) => (
@@ -139,6 +156,21 @@ function printSkills(skills: Skill[], group: string) {
 	);
 }
 
+const Legend = () => {
+	return (
+		<ol className="legend">
+			{Object.values(SkillLevel).map((level) => {
+				return (
+					<li className="legend-item infoLine" key={level}>
+						<p className="experience-display">{levelDisplay(level)}</p>
+						<p className="experience-name">{levelName(level)}</p>
+					</li>
+				);
+			})}
+		</ol>
+	);
+}
+
 const Skills = (props: SkillsProps) => {
 	const {
 		languages,
@@ -153,7 +185,7 @@ const Skills = (props: SkillsProps) => {
 			{printSkills(languages, "Languages")}
 			{printSkills(technologies, "Technologies")}
 			{printSkills(tools, "Tools")}
-
+			<Legend />
 		</div>
 	);
 }
