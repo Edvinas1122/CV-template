@@ -81,15 +81,17 @@ function levelName(level: SkillLevel, dictionary?: any) {
 
 import TintImage from "./TintImage";
 
-const Skill = (props: Skill & { isFirst: boolean, isLast: boolean }) => {
+const Skill = (props: Skill & {children: React.ReactNode}) => {
 	const {
 		name,
 		icon,
 		level,
+		children,
 	} = props;
 
 	return (
 		<dd className={"skill-tag " + "level-" + level}>
+			{children}
 		<div className={"skill"}>
 			<div className="skill-icon">
 				<div className="blend-layer"></div>
@@ -140,24 +142,26 @@ function printSkills(skills: Skill[], group: string) {
 				<dt>{group}</dt>
 				<div className="skills-list">
 				{levels.map(level => (
-					<>
 					<div className={"level-group level-group-" + level} key={level}>
-						<div className="group-tag">
-							<p className={"experience"}>{levelDisplay(level)}</p>
-							<div className="group-marker-begin"></div>
-						</div>
 						{groupedSkills[level].map((skill, index) => (
-							<Skill {...skill} key={index} />
-							))}
-						<div className="group-marker">
-							<div className="group-marker-vis"></div>
-						</div>
+							<Skill {...skill} key={index}>
+								{index === 0 && (
+									<div className="group-tag">
+										<p className={"experience"}>{levelDisplay(level)}</p>
+										<div className="group-marker-begin"></div>
+									</div>
+								)}
+								{index === groupedSkills[level].length - 1 && (
+									<div className="group-marker">
+										<div className="group-marker-vis"></div>
+									</div>
+								)}
+							</Skill>
+						))}
 					</div>
-					</>
 				))}
 				</div>
 			</dl>
-
 	);
 }
 
@@ -198,14 +202,17 @@ const Skills = (props: SkillsProps & any) => {
 	return (
 		<section className="skills description-block">
 			<h2>{dictionary?.skills ? dictionary.skills : "Skills"}</h2>
-
-			{printSkills(languages, dictionary.languages)}
-			{printSkills(technologies, dictionary.technologies)}
-			{printSkills(tools, dictionary.tools)}
-			<Legend 
-				dictionary={dictionary}
-				maxItems={7}
-			/>
+			<figure>
+				{printSkills(languages, dictionary.languages)}
+				{printSkills(technologies, dictionary.technologies)}
+				{printSkills(tools, dictionary.tools)}
+			<figcaption>
+				<Legend 
+					dictionary={dictionary}
+					maxItems={7}
+					/>
+			</figcaption>
+			</figure>
 		</section>
 	);
 }

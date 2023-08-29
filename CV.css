@@ -54,7 +54,10 @@
 	-webkit-text-fill-color: transparent;
 }
 
-
+aside > section > figure {
+	display: flex;
+	flex-direction: column;
+}
 
 .cv_page {
 	@apply w-full h-full flex flex-col md:flex-row items-start;
@@ -238,8 +241,10 @@
 }
 
 .skills-list {
-	display: block;
-	padding-left: 0.2em;
+	display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+	column-gap: 0.2em;
 }
 
 dl > .skills-list > div > dd {
@@ -253,14 +258,14 @@ dl > .skills-list > div > p {
 }
 
 dl > .skills-list > div {
-	display: inline;
+	display: contents;
 }
 
 .skills-list img {
 	@apply rounded-full;
 	width: 32px;
 	height: 32px;
-	padding: 0.2em;
+	padding: 1px;
 	/* box-shadow: 0 0 3px #000000ca, 0 0 10px white; */
 	border-width: 1px;
 	border-color: #6a6a6a2e;
@@ -275,7 +280,7 @@ dl > .skills-list > div {
 .group-marker {
 	display: initial;
 	position: absolute;
-	transform: translateX(-33px);
+	/* transform: translateX(-33px); */
 
 }
 
@@ -284,6 +289,8 @@ dl > .skills-list > div {
 	font-size: 0.5em;
 	position: absolute;
 	font-weight: 100;
+	display:flex;
+	flex-direction: row;
 	/* color: #00000044; */
 	/* color: #00000044; */
 	/* background: linear-gradient(90deg, rgb(255 181 103) 0%, rgb(171 0 255) 100%); */
@@ -292,12 +299,13 @@ dl > .skills-list > div {
 	letter-spacing: 0.2em;
 	/* -webkit-background-clip: text; */
 	/* color: transparent; */
+	margin-left: 0.3em;
 
 	/* left: 0; */
 }
 
 .group-marker-begin, .group-marker-vis {
-	width: 32px;
+	width: 25px;
 	height: 50px;
 	border-color: #0000000c;
 	border-style: solid;
@@ -310,6 +318,7 @@ dl > .skills-list > div {
 	border-top-left-radius: 10px;
 	border-bottom-width: 1px;
 	border-left-width: 1px;
+	/* transform: translateX(-5px); */
 }
 
 .group-marker-vis {
@@ -317,6 +326,7 @@ dl > .skills-list > div {
 	border-bottom-width: 1px;
 	border-right-width: 1px;
 	border-bottom-right-radius: 10px;
+	transform: translateX(10px);
 }
 
 .level-group {
@@ -326,12 +336,16 @@ dl > .skills-list > div {
 
 
 .skill-tag {
-	@apply flex flex-col justify-between;
-	@apply text-gray-600 font-light;
-	font-size: 0.3em;
-	margin-top: 1rem;
-    /* margin-top: 0.05rem;
-    margin-bottom: 0.05rem; */
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	/* font-weight: 300; */
+	/* --tw-text-opacity: 1; */
+	/* color: rgb(75 85 99 / var(--tw-text-opacity)); */
+	/* font-size: 0.3em; */
+	/* margin-top: 1rem; */
+	height: 55px;
+	width: 35px;
 }
 
 .skills {
@@ -349,26 +363,15 @@ dl > .skills-list > div {
 }
 
 .skill {
-	@apply flex flex-col justify-between inline-block;
-	/* stick to flex start */
-	align-items: center;
-	margin-inline: 1em;
-	/* border-top-width: 1px; */
-	padding: 0.3em 0em;
-}
-
-.skill-tag .last {
-	border-right-width: 1px;
-	height: 14px;
-	padding-right: 3px;
-	max-width: none;
-}
-
-
-.level {
-	@apply flex flex-col justify-between;
-	/* @apply text-gray-600 font-light; */
-	font-size: 0.3em;
+    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    /* margin-inline: 1em; */
+    /* border-top-width: 1px; */
+    /* padding: 0.3em 0em; */
+    /* width: 35px; */
 }
 
 
@@ -385,10 +388,9 @@ dl > .skills-list > div {
 	@apply text-center;
 	font-size: 0.6em;
 	font-weight: 400;
-	padding: 0 1em;
 	position: absolute;
 	border-width: 1px;
-	border-radius: 1em 1em;
+    border-radius: 0.45em;
 	z-index: 2;
     background: #f5f5f5d6;
 }
@@ -428,19 +430,14 @@ dl > .skills-list > div {
 	margin-top: 0.5rem;
 	list-style: none;
 	padding: 0;
-	background: linear-gradient(90deg, rgb(163, 156, 145) 0%, rgb(124, 23, 174) 100%);
 	position: relative;
 	display: flex;
-	justify-content: space-evenly;
+	justify-content: space-around;
 	flex-direction: row;
-	background-clip: text;
-	-webkit-background-clip: text;
-	/* border-width: 1px; */
 	border-top-width: 1px;
 	border-bottom-width: 1px;
 	border-radius: 0.2em;
 	line-height: 0.6rem;
-	opacity: 0.9;
 }
 
 .legend li  {
