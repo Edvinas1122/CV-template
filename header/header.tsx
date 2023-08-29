@@ -1,6 +1,6 @@
 import { getFontAwesomeIcon } from "../utils/Icon";
 
-type Contacts = {
+type ContactsType = {
 	phone: string;
 	email: string;
 	website: string;
@@ -32,17 +32,18 @@ type Social = {
 	// icon: string;
 }
 
-type Profile = {
+type ProfileType = {
 	firstName: string;
 	lastName: string;
-	image: string;
+	image: string | {backgroundImage: string, frontImage: string};
 	title: string;
 }
 
 interface CVHeaderProps {
-	profile: Profile;
-	contacts: Contacts;
+	profile: ProfileType;
+	contacts: ContactsType;
 	childern?: React.ReactNode;
+	dictionary?: any;
 }
 
 interface CVProps {
@@ -83,29 +84,52 @@ const Social = (props: Social) => {
 	);
 }
 
-const Profile = ({profile}: {profile: Profile}) => {
+import TintImage from "../content/TintImage";
+
+const Profile = ({
+	profile,
+}: {
+	profile: ProfileType,
+}) => {
 	const {
 		firstName,
 		lastName,
 		image,
 		title,
 	} = profile;
+
+	if (image?.backgroundImage && image?.frontImage) {
+
+	}
 	return (
-		<div className="profile">
-			<div style={{
-				marginBottom: '40px'
-			}}>
+		<header className="profile">
 				<div className={"image-container"}>
-				<img src={image} alt="profile image"/>
+				{
+					image?.backgroundImage && image?.frontImage ? (
+						<>
+						{/* <TintImage
+							src={image.backgroundImage}
+							className={"profile image"}
+							color_1="#f5de9f"
+							color_2="#4e115c"
+							blendStrength={0}
+							angle={-45}
+							canvas_height={800}
+							canvas_width={600}
+							/> */}
+						<img src={image.frontImage} alt="profile image" className={"image front"}/>
+						<img src={image.backgroundImage} alt="profile image" className={"image back"}/>
+						</>
+					) : (<img src={image} alt="profile image" className={"image"}/>)
+				}
 				</div>
-				<div className={
+				<hgroup className={
 					"name-title"
 				}>
 					<h1>{firstName} {lastName}</h1>
 					<p>{title}</p>
-				</div>
-			</div>
-		</div>
+				</hgroup>
+		</header>
 	);
 }
 
@@ -149,7 +173,7 @@ const BasicContacts = ({
 	const websiteHTML = getFontAwesomeIcon("website");
 
 	return (
-		<div className="basic-contacts">
+		<address className="basic-contacts">
 			<dd className="phone infoLine">
 				{phoneHTML}
 				<p>{phone}</p>
@@ -165,11 +189,17 @@ const BasicContacts = ({
 				{websiteHTML}
 				<a href={website}>{website}</a>
 			</dd>
-		</div>
+		</address>
 	);
 }
 
-const Contacts = ({contacts}: {contacts: Contacts}) => {
+const Contacts = ({
+	contacts,
+	dictionary,
+}: {
+	contacts: ContactsType,
+	dictionary?: any,
+}) => {
 	const {
 		phone,
 		email,
@@ -180,18 +210,18 @@ const Contacts = ({contacts}: {contacts: Contacts}) => {
 	} = contacts;
 
 	return (
-		<section className="contacts group">
-			<h2>Contacts</h2>
+		<section className="contacts description-block">
+			<h2>{dictionary?.contacts ? dictionary.contacts : "Contacts"}</h2>
 			<dl>
-			<dt>Basic</dt>
+			{ dictionary?.basic ? (<dt>{dictionary.basic}</dt>): null}
 			<BasicContacts
 				phone={phone}
 				email={email}
 				website={website}
 				address={address}
 			/>
-				<dt>Socials</dt>
-			<div className="socials">
+			<dt>{dictionary?.socials ? dictionary.socials : "Socials"}</dt>
+			<address className="socials">
 				{socials.map((social, index) => (
 					<Social
 						key={index}
@@ -200,9 +230,9 @@ const Contacts = ({contacts}: {contacts: Contacts}) => {
 						link={social.link}
 					/>
 				))}
-			</div>
-			<dt>Instant Messaging</dt>
-			<div className="instant-messanging">
+			</address>
+			<dt>{dictionary?.instantMessanging ? dictionary.instantMessanging : "Instant Messanging"}</dt>
+			<address className="instant-messanging">
 				{instantMessanging.map((instantMessanging, index) => (
 					<InstantMessanging
 						key={index}
@@ -211,30 +241,25 @@ const Contacts = ({contacts}: {contacts: Contacts}) => {
 						icon={instantMessanging.icon}
 					/>
 				))}
-			</div>
+			</address>
 			</dl>
 		</section>
 	);
 }
 
 const CVSideBar = ({
-	profile,
-	contacts,
-	childern,
-}: CVHeaderProps
-) => {
-	return (
-		<div className={"cv_header"}>
-			<Profile
-				profile={profile}
-				/>
-			{childern}
-			<Contacts
-				contacts={contacts}
-				/>
-		</div>
-	);
+	children
+}: {
+	children: React.ReactNode;
+}) => {
+  return (
+    <aside className={"cv_header"}>
+      {children}
+    </aside>
+  );
 }
 
+
 export default CVSideBar;
-export type { CVProps, CVHeaderProps, Profile, Contacts, Address, Social, InstantMessanging };
+export { Profile, Contacts };
+export type { CVProps, CVHeaderProps, ProfileType, ContactsType, Address, Social, InstantMessanging };

@@ -13,6 +13,7 @@ type Experience = {
 }
 
 interface CVContentProps {
+	about: AboutProps,
 	education: Education[],
 	experience: Experience[],
 }
@@ -45,6 +46,33 @@ type PresentableContentProps = {
 	occupation: OccupationContent[];
 }
 
+interface OrganizationProps {
+	name: string;
+	logo?: string;
+	website?: string;
+}
+
+const Organization = ({
+	organization,
+}:{
+	organization: OrganizationProps,
+}) => {
+	return (
+		<dd className={"organization"}>
+			<div className={"organization_header"}>
+				<span className={"name"}>{organization.name}</span>
+			</div>
+			{organization.website && organization.logo && (
+				<div className={"organization_body"}>
+					<a href={organization.website}>
+						<img src={organization.logo} alt={"logo-" + organization.name} />
+					</a>
+				</div>
+			)}
+		</dd>
+	);
+}
+
 const OccupationActivitiy = ({
 	activity,
 }:{
@@ -52,36 +80,75 @@ const OccupationActivitiy = ({
 }) => {
 	return (
 		<div className={"occupation_activity"}>
-			<div className={"occupation_activity_header infoLine"}>
-				<h3>{activity.title}</h3>
-				<p>{activity.fromDate} - {activity.toDate}</p>
+		  <div className={"occupation_activity_header_box"}>
+			<div className={"occupation_activity_header"}>
+				<dt className={"title"}>{activity.title}</dt>
+					<dd className={"date"}>
+						<time>
+							{activity.fromDate} - {activity.toDate}
+						</time>
+					</dd>
+				</div>
+				<div>
+					{activity.organization?.name ? (
+					<Organization
+						organization={activity.organization}
+					/>
+					) : (<span>{activity.organization}</span>)}
+				</div>
 			</div>
-			<div className={"occupation_activity_body"}>
-				<p>{activity.description}</p>
-			</div>
+		  <div className={"occupation_activity_body"}>
+			<dd>
+				<p>
+					{activity.description}
+				</p>
+			</dd>
+		  </div>
 		</div>
-	);
+	  );
+}
+
+function getGrouptTitle(group: OccupationType, dictionary?: any): string {
+	switch (group) {
+		case OccupationType.education:
+			return dictionary?.education ? dictionary.education : "Education";
+		case OccupationType.experience:
+			return dictionary?.experience ? dictionary.experience : "Experience";
+		case OccupationType.other:
+			return dictionary?.other ? dictionary.other : "Other";
+		default:
+			return "";
+	}
 }
 
 const GetOccupationContentGroup = ({
 	group,
 	content,
-  }: {
+	dictionary,
+}: {
 	group: OccupationType;
 	content: OccupationContent[];
-  }) => {
+	dictionary?: any;
+}) => {
+
+	const groupTitle: string = getGrouptTitle(group, dictionary);
+	const contentGroup: OccupationContent[] = content.filter((item) => item.occupationType === group);
+
+	if (contentGroup.length === 0) {
+		return null;
+	}
 	return (
-	  <div>
-		{content
-			.filter((item) => item.occupationType === group)
-			.map((item, index) => (
-				<OccupationActivitiy
-				activity={item}
-				key={index}
-				/>
-			))
-		}
-	  </div>
+		<>
+		<h2>{groupTitle}</h2>
+		<dl>
+			{contentGroup.map((item, index) => (
+					<OccupationActivitiy
+						activity={item}
+						key={index}
+					/>)
+			)}
+		</dl>
+		</>
 	);
 };
 
@@ -99,29 +166,32 @@ interface AboutProps {
 
 const About = ({
 	about,
+	dictionary,
 }:{
 	about: AboutProps,
+	dictionary?: any,
 }) => {
+
 	return (
 		<section className={"about"}>
-			<h2>About Me</h2>
+			<h2>{dictionary?.about ? dictionary.about : "About"}</h2>
 			<div className={"about_info"}>
 				<div className={"about_info_who"}>
 				<h3>
-					Who am I?
+					{dictionary?.who ? dictionary.who : "Who am I?"}
 				</h3>
 				<p>{about.who}</p>
 				</div>
 				<div className={"about_info_aspirations"}>
 
 				<h3>
-					Aspirations
+					{dictionary?.aspirations ? dictionary.aspirations : "Aspirations"}
 				</h3>
 				<p>{about.aspirations}</p>
 				</div>
 				<div className={"about_info_background"}>
 				<h3>
-					Background
+					{dictionary?.background ? dictionary.background : "Background"}
 				</h3>
 				<p>{about.background}</p>
 				</div>
@@ -131,36 +201,48 @@ const About = ({
 }
 
 
-import Timeline from './timeline';
-
-const CVContent = ({
-	content
-}:{
-	content: CVContentProps,
+const OccupationDisplay = ({
+	occupation,
+	dictionary,
+}: {
+	occupation: OccupationContent[];
+	dictionary?: any;
 }) => {
-
+	const occupationTypesArray = Object.values(OccupationType);
+  
 	return (
-		<div className={"cv_content"}>
-			<About 
-				about={content.about}
-			/>
-			<div className={"occupation"}>
-				{/* <Timeline
-					occupations={content.occupation}
-				/>
-				<h2>Education</h2>
+		<section className={"occupation"}>
+			{occupationTypesArray.map((item, index) => (
 				<GetOccupationContentGroup
-					group={OccupationType.education}
-					content={content.occupation}
+					key={index}
+					group={item}
+					content={occupation}
+					dictionary={dictionary}
 				/>
-				<h2>Experience</h2>
-				<GetOccupationContentGroup
-					group={OccupationType.experience}
-					content={content.occupation}
-				/> */}
-			</div>
-		</div>
+			))}
+		</section>
 	);
 };
 
+
+import Timeline from './timeline';
+
+const CVContent = ({
+	children,
+	aside,
+}: {
+	children: React.ReactNode;
+	aside?: React.ReactNode;
+}) => {
+	return (
+		<main>
+			{aside}
+			<article className={"cv_content"}>
+				{children}
+			</article>
+		</main>
+	);
+}
+
 export default CVContent;
+export { About, OccupationDisplay };

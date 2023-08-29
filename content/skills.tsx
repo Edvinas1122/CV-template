@@ -36,54 +36,74 @@ const SkillLevelDisplay = ({
 	);
 }
 
+
 function levelDisplay(level: SkillLevel) {
+	let count;
 	switch (level) {
 		case SkillLevel.Beginner:
-		  return "●";
+		count = 1;
+		break;
 		case SkillLevel.Intermediate:
-		  return "●●";
+		count = 2;
+		break;
 		case SkillLevel.Advanced:
-		  return "●●●";
+		count = 3;
+		break;
 		case SkillLevel.Expert:
-		  return "●●●●";
+		count = 4;
+		break;
 		default:
-		  return "";
+		count = 0;
 	}
+	const symbols = Array.from({ length: count }, (_, i) => (
+		<span key={i} className={`color-${i + 1}`}>
+			●
+		</span>
+	));
+	
+	return <>{symbols}</>;
 }
 
-function levelName(level: SkillLevel) {
+function levelName(level: SkillLevel, dictionary?: any) {
 	switch (level) {
 		case SkillLevel.Beginner:
-			return "Beginner";
+			return dictionary?.beginner ? dictionary.beginner : "Beginner";
 		case SkillLevel.Intermediate:
-			return "Intermediate";
+			return dictionary?.intermediate ? dictionary.intermediate : "Intermediate";
 		case SkillLevel.Advanced:
-			return "Advanced";
+			return dictionary?.advanced ? dictionary.advanced : "Advanced";
 		case SkillLevel.Expert:
-			return "Expert";
+			return dictionary?.expert ? dictionary.expert : "Expert";
 		default:
 			return "";
 	}
 }
+
+import TintImage from "./TintImage";
 
 const Skill = (props: Skill & { isFirst: boolean, isLast: boolean }) => {
 	const {
 		name,
 		icon,
 		level,
-		isFirst,
-		isLast,
 	} = props;
-
-	const skillPropStyle = "experience " + (isLast ? "last" : ""); 
 
 	return (
 		<dd className={"skill-tag " + "level-" + level}>
-            {/* <div className={skillPropStyle}>
-                {isFirst && levelDisplay(level)}
-            </div> */}
 		<div className={"skill"}>
 			<div className="skill-icon">
+				<div className="blend-layer"></div>
+				{/* <TintImage
+					src={icon}
+					className={"skill-icon-canvas"}
+					alt={"skill-icon-" + name}
+					color_1="#ffd1a1"
+					color_2="#aa00ff"
+					blendStrength={0.5}
+					angle={-45}
+					canvas_height={1000}
+					canvas_width={1000}
+				/> */}
 				<img src={icon} alt={"skill-icon-" + name} />
 			</div>
 			<div className={"skill-name-box"}>
@@ -105,16 +125,6 @@ function groupByLevel(skills: Skill[]): {[level: string]: Skill[]} {
 }
 
 function printSkills(skills: Skill[], group: string) {
-	// // Create metadata for each skill
-	// const skillMetadata = skills.map((skill, index) => {
-	// 	const isLast = index === skills.length - 1 || skills[index + 1].level !== skill.level;
-	// 	const isFirst = index === 0 || skills[index - 1].level !== skill.level;
-	// 	return {
-	// 		...skill,
-	// 		isFirst,
-	// 		isLast
-	// 	};
-	// });
 	const groupedSkills = groupByLevel(skills);
 	const levels = Object.values(
 		skills.reduce((acc, skill) => {
@@ -129,13 +139,8 @@ function printSkills(skills: Skill[], group: string) {
 			<dl className={group}>
 				<dt>{group}</dt>
 				<div className="skills-list">
-					{/* {skillMetadata.map((skill, index) => (
-						<Skill 
-						{...skill} 
-						key={index}
-						/>
-						))} */}
 				{levels.map(level => (
+					<>
 					<div className={"level-group level-group-" + level} key={level}>
 						<div className="group-tag">
 							<p className={"experience"}>{levelDisplay(level)}</p>
@@ -145,10 +150,10 @@ function printSkills(skills: Skill[], group: string) {
 							<Skill {...skill} key={index} />
 							))}
 						<div className="group-marker">
-							{/* <p className={"experience"}>{levelName(level)}</p> */}
 							<div className="group-marker-vis"></div>
 						</div>
 					</div>
+					</>
 				))}
 				</div>
 			</dl>
@@ -156,37 +161,52 @@ function printSkills(skills: Skill[], group: string) {
 	);
 }
 
-const Legend = () => {
+const Legend = ({
+	dictionary,
+	maxItems,
+  }: {
+	dictionary?: any,
+	maxItems?: number,
+  }) => {
 	return (
-		<ol className="legend">
-			{Object.values(SkillLevel).map((level) => {
-				return (
-					<li className="legend-item infoLine" key={level}>
-						<p className="experience-display">{levelDisplay(level)}</p>
-						<p className="experience-name">{levelName(level)}</p>
-					</li>
-				);
-			})}
-		</ol>
+	  <ol className="legend">
+		{Object.values(SkillLevel)
+		  .slice(0, maxItems)
+		  .map((level) => {
+			if (levelName(level) === "") {
+			  return null;
+			}
+			return (
+			  <li className="legend-item" key={level}>
+				<p className="experience-name">{levelName(level, dictionary)}</p>
+				<p className="experience-display">{levelDisplay(level)}</p>
+			  </li>
+			);
+		  })}
+	  </ol>
 	);
-}
+  };
 
-const Skills = (props: SkillsProps) => {
+const Skills = (props: SkillsProps & any) => {
 	const {
 		languages,
 		technologies,
 		tools,
+		dictionary,
 	} = props;
 
 	return (
-		<div className="skills group">
-			<h2>Skills</h2>
+		<section className="skills description-block">
+			<h2>{dictionary?.skills ? dictionary.skills : "Skills"}</h2>
 
-			{printSkills(languages, "Languages")}
-			{printSkills(technologies, "Technologies")}
-			{printSkills(tools, "Tools")}
-			<Legend />
-		</div>
+			{printSkills(languages, dictionary.languages)}
+			{printSkills(technologies, dictionary.technologies)}
+			{printSkills(tools, dictionary.tools)}
+			<Legend 
+				dictionary={dictionary}
+				maxItems={7}
+			/>
+		</section>
 	);
 }
 
