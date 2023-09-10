@@ -1,6 +1,7 @@
 import CVSideBar, {CVHeaderProps, Profile, Contacts} from './header/header';
 import CVContent, {CVContentProps, About, OccupationDisplay} from './content/CVContent';
 import Skills from './content/skills';
+import Portfolio from './content/portfolio';
 import "./CV.css";
 
 interface CVProps {
@@ -105,9 +106,7 @@ export default function CV({
 							dictionary={dictionary}
 						/>
 						<Skills
-							languages={data.skills.languages}
-							technologies={data.skills.technologies}
-							tools={data.skills.tools}
+							categories={data.skills}
 							dictionary={dictionary}
 						/>
 						<Contacts
@@ -124,6 +123,12 @@ export default function CV({
 				<OccupationDisplay
 					occupation={data.content.occupation}
 					dictionary={dictionary}
+				/>
+				<Portfolio
+					portfolio={data.content.portfolio}
+					portfolioLinks={data.content.portfolioLinks}
+					dictionary={dictionary}
+
 				/>
 			</CVContent>
 		</article>

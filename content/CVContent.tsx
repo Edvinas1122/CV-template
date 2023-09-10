@@ -52,24 +52,26 @@ interface OrganizationProps {
 	website?: string;
 }
 
+import { getFontAwesomeIcon } from "../utils/Icon";
+
 const Organization = ({
 	organization,
 }:{
 	organization: OrganizationProps,
 }) => {
 	return (
-		<dd className={"organization"}>
-			<div className={"organization_header"}>
+		<div className={"organization"}>
+			<dd className={"organization_header"}>
 				<span className={"name"}>{organization.name}</span>
-			</div>
+			</dd>
 			{organization.website && organization.logo && (
-				<div className={"organization_body"}>
-					<a href={organization.website}>
-						<img src={organization.logo} alt={"logo-" + organization.name} />
-					</a>
-				</div>
+			<dd className={"organization_body"}>
+				<a href={organization.website}>
+					{getFontAwesomeIcon("link")}
+				</a>
+			</dd>
 			)}
-		</dd>
+		</div>
 	);
 }
 
@@ -79,16 +81,17 @@ const OccupationActivitiy = ({
 	activity: OccupationContent,
 }) => {
 	return (
-		<div className={"occupation_activity"}>
-		  <div className={"occupation_activity_header_box"}>
-			<div className={"occupation_activity_header"}>
-				<dt className={"title"}>{activity.title}</dt>
-					<dd className={"date"}>
-						<time>
-							{activity.fromDate} - {activity.toDate}
-						</time>
-					</dd>
-				</div>
+		<li className={"occupation_activity"}>
+			<div className={"occupation_activity_body"}>
+				<header className={"occupation_activity_header_box"}>
+					<div className={"occupation_activity_header"}>
+						<dt className={"title"}>
+							<h3>
+								{activity.title}
+							</h3>
+						</dt>
+					</div>
+				</header>
 				<div>
 					{activity.organization?.name ? (
 					<Organization
@@ -97,14 +100,16 @@ const OccupationActivitiy = ({
 					) : (<span>{activity.organization}</span>)}
 				</div>
 			</div>
-		  <div className={"occupation_activity_body"}>
-			<dd>
-				<p>
-					{activity.description}
-				</p>
+			<dd className={"date"}>
+				<time>
+					{activity.fromDate}
+				</time>
+				{/* <p>-</p> */}
+				<time>
+					{activity.toDate}
+				</time>
 			</dd>
-		  </div>
-		</div>
+		</li>
 	  );
 }
 
@@ -139,14 +144,18 @@ const GetOccupationContentGroup = ({
 	}
 	return (
 		<>
-		<h2>{groupTitle}</h2>
+			<header>
+				<h2>{groupTitle}</h2>
+			</header>
 		<dl>
+			<ol>
 			{contentGroup.map((item, index) => (
-					<OccupationActivitiy
-						activity={item}
-						key={index}
-					/>)
-			)}
+				<OccupationActivitiy
+				activity={item}
+				key={index}
+				/>)
+				)}
+			</ol>
 		</dl>
 		</>
 	);
@@ -158,47 +167,121 @@ export interface CVContentProps {
 	list: ListContent[];
 }
 
+type InlineTextProps = {
+	paragraphs: string[];
+}
+
 interface AboutProps {
-    who: string;
-    aspirations: string;
-    background: string;
+	displayParagraphTags?: boolean;
+    who: InlineTextProps;
+    aspirations: InlineTextProps;
+    background: InlineTextProps;
+}
+
+const ParagraphInterpretation = ({ paragraph }: { paragraph: string }) => {
+	const strongPieces = paragraph.split('**');
+	return (
+		<p>
+			{strongPieces.map((strongPiece, strongIndex) => {
+				if (strongIndex % 2 !== 0) return <strong key={strongIndex}>{strongPiece}</strong>;
+	
+				const emPieces = strongPiece.split('*');
+					return emPieces.map((emPiece, emIndex) => (
+						emIndex % 2 === 0 ? emPiece : <em key={emIndex}>{emPiece}</em>
+				));
+			})}
+		</p>
+	);
+}
+
+
+const InlineText = ({
+	paragraphs,
+}:{
+	paragraphs: string[],
+}) => {
+	return (
+		<section className={"inline-block"}>
+			{paragraphs.map((paragraph, index) => (
+				<ParagraphInterpretation
+					paragraph={paragraph}
+					key={index}
+				/>
+			))}
+		</section>
+	);
 }
 
 const About = ({
 	about,
-	dictionary,
-}:{
-	about: AboutProps,
-	dictionary?: any,
-}) => {
+	dictionary = {},
+  }: {
+	about: AboutProps;
+	dictionary?: any;
+  }) => {
+	const displayParagraphTags = about.displayParagraphTags ?? true;
+	const indentSecondParagraph = !about.defaultIndentation ?? true;
+	const indentedText = about.paragraphIndentation ?? true;
+
+	const points = [
+	  { key: "who", defaultTitle: "Who am I?" },
+	  { key: "aspirations", defaultTitle: "Aspirations" },
+	  { key: "background", defaultTitle: "Background" },
+	];
+
+	let explanations = [];
+
+	function matchExplanation(paragraph: string): string {
+		function cleanExplanation(explanation: string) {
+			return explanation.replace(/^\*\(|\)\*$/g, '');
+		}
+		
+		function removeExplanation(input: string): string {
+			return input.replace(/\(([^)]+?)\)\*\(([^)]+?)\)\*/g, '$1');
+		}
+	
+		const regex = /\(([^)]+?)\)\*\(([^)]+?)\)\*/g;
+		let matches;
+		while ((matches = regex.exec(paragraph)) !== null) {
+			explanations.push({
+				term: cleanExplanation(matches[1]),
+				explanation: cleanExplanation(matches[2]),
+			});
+			console.log(matches);
+		}
+		return removeExplanation(paragraph);
+	}
+
 
 	return (
-		<section className={"about"}>
-			<h2>{dictionary?.about ? dictionary.about : "About"}</h2>
-			<div className={"about_info"}>
-				<div className={"about_info_who"}>
-				<h3>
-					{dictionary?.who ? dictionary.who : "Who am I?"}
-				</h3>
-				<p>{about.who}</p>
-				</div>
-				<div className={"about_info_aspirations"}>
+		<section className={`about ${indentedText ? "indeted_text" : ""}`}>
+		<h2>{dictionary?.about ?? "About"}</h2>
+		<div className={"about_info"}>
+		  {points.map(({ key, defaultTitle }, index) => (
+			about[key] && (
+			  <div className={`about_info_${key} ${index % 2 === 1 && indentSecondParagraph ? 'indent' : ''}`} key={key}>
+				{displayParagraphTags && (<h3>{dictionary[key] ?? defaultTitle}</h3>)}
+				<InlineText paragraphs={about[key].map(matchExplanation)} />
+			  </div>
+			)
+		  ))}
 
-				<h3>
-					{dictionary?.aspirations ? dictionary.aspirations : "Aspirations"}
-				</h3>
-				<p>{about.aspirations}</p>
-				</div>
-				<div className={"about_info_background"}>
-				<h3>
-					{dictionary?.background ? dictionary.background : "Background"}
-				</h3>
-				<p>{about.background}</p>
-				</div>
+		  {explanations.length > 0 && (
+			<div className={"about_info_explanations"}>
+			  <dl>
+				{explanations.map((explanation, index) => (
+				  <div key={index}>
+					<dt>{explanation.term}</dt>
+					<dd>{explanation.explanation}</dd>
+				  </div>
+				))}
+			</dl>
 			</div>
-		</section>
+		  )}	
+		</div>
+	  </section>
 	);
-}
+};
 
 
 const OccupationDisplay = ({
@@ -212,20 +295,17 @@ const OccupationDisplay = ({
   
 	return (
 		<section className={"occupation"}>
-			{occupationTypesArray.map((item, index) => (
-				<GetOccupationContentGroup
+				{occupationTypesArray.map((item, index) => (
+					<GetOccupationContentGroup
 					key={index}
 					group={item}
 					content={occupation}
 					dictionary={dictionary}
-				/>
-			))}
+					/>
+				))}
 		</section>
 	);
 };
-
-
-import Timeline from './timeline';
 
 const CVContent = ({
 	children,

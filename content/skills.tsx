@@ -11,14 +11,6 @@ type Skill = {
 	level: SkillLevel;
 }
 
-interface SkillsProps {
-	languages: Skill[];
-	technologies: Skill[];
-	tools: Skill[];
-}
-
-
-
 const SkillLevelDisplay = ({
 	level,
 }: {
@@ -79,39 +71,29 @@ function levelName(level: SkillLevel, dictionary?: any) {
 	}
 }
 
-import TintImage from "./TintImage";
-
-const Skill = (props: Skill & {children: React.ReactNode}) => {
+const Skill = (props: Skill & {children: React.ReactNode, displayIcon?: boolean}) => {
 	const {
 		name,
 		icon,
 		level,
 		children,
+		displayIcon,
 	} = props;
+
+	const displayIconDefault = displayIcon ?? true;
 
 	return (
 		<dd className={"skill-tag " + "level-" + level}>
 			{children}
-		<div className={"skill"}>
-			<div className="skill-icon">
-				<div className="blend-layer"></div>
-				{/* <TintImage
-					src={icon}
-					className={"skill-icon-canvas"}
-					alt={"skill-icon-" + name}
-					color_1="#ffd1a1"
-					color_2="#aa00ff"
-					blendStrength={0.5}
-					angle={-45}
-					canvas_height={1000}
-					canvas_width={1000}
-				/> */}
-				<img src={icon} alt={"skill-icon-" + name} />
+			<div className={"skill"}>
+				{displayIconDefault && (<div className="skill-icon">
+					<div className="blend-layer"/>
+					<img src={icon} alt={"skill-icon-" + name} />
+				</div>)}
+				<div className={"skill-name-box"}>
+					<p className="skill-name">{name}</p>
+				</div>
 			</div>
-			<div className={"skill-name-box"}>
-				<p className="skill-name">{name}</p>
-			</div>
-		</div>
 		</dd>
 	);
 }
@@ -126,7 +108,7 @@ function groupByLevel(skills: Skill[]): {[level: string]: Skill[]} {
 	}, {} as {[level: string]: Skill[]});
 }
 
-function printSkills(skills: Skill[], group: string) {
+function printSkills(skills: Skill[], group: string, key?: string) {
 	const groupedSkills = groupByLevel(skills);
 	const levels = Object.values(
 		skills.reduce((acc, skill) => {
@@ -138,21 +120,21 @@ function printSkills(skills: Skill[], group: string) {
 
 	return (
 
-			<dl className={group}>
+			<dl className={group} key={key}>
 				<dt>{group}</dt>
 				<div className="skills-list">
 				{levels.map(level => (
-					<div className={"level-group level-group-" + level} key={level}>
+					<div className={"level-group level-group-" + level} key={"level-"+level}>
 						{groupedSkills[level].map((skill, index) => (
-							<Skill {...skill} key={index}>
+							<Skill {...skill} key={"skill-"+index+level}>
 								{index === 0 && (
-									<div className="group-tag">
+									<div className="group-tag" key={"group-tag-"+level+index}>
 										<p className={"experience"}>{levelDisplay(level)}</p>
 										<div className="group-marker-begin"></div>
 									</div>
 								)}
 								{index === groupedSkills[level].length - 1 && (
-									<div className="group-marker">
+									<div className="group-marker" key={"group-marker-"+level+index}>
 										<div className="group-marker-vis"></div>
 									</div>
 								)}
@@ -168,53 +150,56 @@ function printSkills(skills: Skill[], group: string) {
 const Legend = ({
 	dictionary,
 	maxItems,
-  }: {
+}: {
 	dictionary?: any,
 	maxItems?: number,
-  }) => {
+}) => {
 	return (
-	  <ol className="legend">
-		{Object.values(SkillLevel)
-		  .slice(0, maxItems)
-		  .map((level) => {
-			if (levelName(level) === "") {
-			  return null;
-			}
-			return (
-			  <li className="legend-item" key={level}>
-				<p className="experience-name">{levelName(level, dictionary)}</p>
-				<p className="experience-display">{levelDisplay(level)}</p>
-			  </li>
-			);
-		  })}
-	  </ol>
+		<ol className="legend">
+			{Object.values(SkillLevel)
+			.slice(0, maxItems).sort((a, b) => b - a)
+			.map((level) => {
+				if (levelName(level) === "") {
+					return null;
+				}
+				return (
+					<li className={"legend-item-"+level} key={level}>
+						<p className="experience-name">{levelName(level, dictionary)}</p>
+						<p className="experience-display">{levelDisplay(level)}</p>
+					</li>
+				);
+			})}
+		</ol>
+	);
+};
+
+interface Skills {
+	[key: string]: Skill[];
+}
+
+import { capitalizeFirstLetter } from "../utils/stringFunctions";
+
+const Skills = ({
+	categories,
+	dictionary,
+} : {
+	categories: Skills;
+	dictionary?: any;
+}) => {
+
+	return (
+	  <section className="skills description-block">
+		<h2>{dictionary?.skills ?? "Skills"}</h2>
+		<figure>
+		  {Object.keys(categories).map((categoryKey, index) => (
+			printSkills(categories[categoryKey], dictionary[categoryKey] ?? capitalizeFirstLetter(categoryKey), "category-"+index)
+		  ))}
+		  <figcaption>
+			<Legend dictionary={dictionary} maxItems={7} />
+		  </figcaption>
+		</figure>
+	  </section>
 	);
   };
-
-const Skills = (props: SkillsProps & any) => {
-	const {
-		languages,
-		technologies,
-		tools,
-		dictionary,
-	} = props;
-
-	return (
-		<section className="skills description-block">
-			<h2>{dictionary?.skills ? dictionary.skills : "Skills"}</h2>
-			<figure>
-				{printSkills(languages, dictionary.languages)}
-				{printSkills(technologies, dictionary.technologies)}
-				{printSkills(tools, dictionary.tools)}
-			<figcaption>
-				<Legend 
-					dictionary={dictionary}
-					maxItems={7}
-					/>
-			</figcaption>
-			</figure>
-		</section>
-	);
-}
 
 export default Skills;

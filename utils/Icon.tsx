@@ -6,6 +6,7 @@ import {
 	faEnvelope,
 	faGlobe,
 	faLocationDot,
+	faExternalLinkAlt
 }
 from '@fortawesome/free-solid-svg-icons';
 
@@ -46,24 +47,30 @@ const iconMap = {
 	"email": faEnvelope,
 	"website": faGlobe,
 	"address": faLocationDot,
+	"link": faExternalLinkAlt,
 };
 
 export const getFontAwesomeIcon = (social: string) => {
+    // Convert the input to lowercase
+    const lowerCaseSocial = social.toLowerCase();
 
-	const icon = iconMap[social as keyof typeof iconMap];
+    // Find the correct key in the iconMap (case-insensitive)
+    const matchedKey = Object.keys(iconMap).find(
+        key => key.toLowerCase() === lowerCaseSocial
+    );
 
-	if (!icon) {
-		return null;
-	}
+    const icon = matchedKey ? iconMap[matchedKey as keyof typeof iconMap] : null;
 
-	return (
-		<>
-			<FontAwesomeIcon
-				icon={icon}
-				style={{
+    if (!icon) {
+        return null;
+    }
 
-				}}
-			/>
-		</>
-	);
+    return (
+        <>
+            <FontAwesomeIcon
+                icon={icon}
+                style={{}}
+            />
+        </>
+    );
 };

@@ -107,18 +107,8 @@ const Profile = ({
 				{
 					image?.backgroundImage && image?.frontImage ? (
 						<>
-						{/* <TintImage
-							src={image.backgroundImage}
-							className={"profile image"}
-							color_1="#f5de9f"
-							color_2="#4e115c"
-							blendStrength={0}
-							angle={-45}
-							canvas_height={800}
-							canvas_width={600}
-							/> */}
-						<img src={image.frontImage} alt="profile image" className={"image front"}/>
-						<img src={image.backgroundImage} alt="profile image" className={"image back"}/>
+							<img src={image.frontImage} alt="profile image" className={"image front"}/>
+							<img src={image.backgroundImage} alt="profile image" className={"image back"}/>
 						</>
 					) : (<img src={image} alt="profile image" className={"image"}/>)
 				}
@@ -178,17 +168,17 @@ const BasicContacts = ({
 				{phoneHTML}
 				<p>{phone}</p>
 			</dd>
-			<Address
-				address={address}
-			/>
 			<dd className="email infoLine">
 				{emailHTML}
 				<p>{email}</p>
 			</dd>
-			<dd className="website infoLine">
+			<Address
+				address={address}
+			/>
+			{/* <dd className="website infoLine">
 				{websiteHTML}
 				<a href={website}>{website}</a>
-			</dd>
+			</dd> */}
 		</address>
 	);
 }
@@ -210,7 +200,7 @@ const Contacts = ({
 	} = contacts;
 
 	return (
-		<section className="contacts description-block">
+		<footer className="contacts description-block">
 			<h2>{dictionary?.contacts ? dictionary.contacts : "Contacts"}</h2>
 			<dl>
 			{ dictionary?.basic ? (<dt>{dictionary.basic}</dt>): null}
@@ -220,7 +210,7 @@ const Contacts = ({
 				website={website}
 				address={address}
 			/>
-			<dt>{dictionary?.socials ? dictionary.socials : "Socials"}</dt>
+			{/* <dt>{dictionary?.socials ? dictionary.socials : "Socials"}</dt>
 			<address className="socials">
 				{socials.map((social, index) => (
 					<Social
@@ -241,9 +231,9 @@ const Contacts = ({
 						icon={instantMessanging.icon}
 					/>
 				))}
-			</address>
+			</address> */}
 			</dl>
-		</section>
+		</footer>
 	);
 }
 
