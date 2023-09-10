@@ -1,8 +1,4 @@
 # CV nextjs
-
-Created: September 5, 2023 6:00 PM
-Status: Private
-
 ## Example
 
 ![https://raw.githubusercontent.com/Edvinas1122/CV-template/master/example/cv-preview-example.png](https://raw.githubusercontent.com/Edvinas1122/CV-template/master/example/cv-preview-example.png)
